@@ -7,13 +7,17 @@
 class UCameraComponent;
 class UCapsuleComponent;
 class USpringArmComponent;
-class UCharacterMovementComponent;
+class UFloatingPawnMovement;
 struct FInputActionValue;
 
 UCLASS()
 class CHAPTER3_ASSIGNMENT2_API AMainPawnCharacter : public APawn
 {
 	GENERATED_BODY()
+
+	float NormalSpeed;
+	float SprintSpeedMultiplier;
+	float CharacterSpeed;
 
 public:
 	AMainPawnCharacter();
@@ -25,17 +29,32 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Character")
 	USkeletalMeshComponent* SkeletalMeshComponent;
 	UPROPERTY(VisibleAnywhere, Category = "Character")
-	UCharacterMovementComponent* CharacterMovementComponent;
+	UFloatingPawnMovement* MovementComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* CameraComponent;
 
-protected:
-	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+protected:
+	bool bIsGround;
+	bool bUseGravity;
+	float Mass;
+	
+	const float Gravity = 980;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION()
+	void Move(const FInputActionValue& value);
+	UFUNCTION()
+	void Look(const FInputActionValue& value);
+	UFUNCTION()
+	void StartSprint(const FInputActionValue& value);
+	UFUNCTION()
+	void EndSprint(const FInputActionValue& value);
+
+	//void AddGravity();
 };
