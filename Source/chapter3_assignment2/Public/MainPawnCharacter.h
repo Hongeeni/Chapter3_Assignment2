@@ -17,7 +17,6 @@ class CHAPTER3_ASSIGNMENT2_API AMainPawnCharacter : public APawn
 
 	float NormalSpeed;
 	float SprintSpeedMultiplier;
-	float CharacterSpeed;
 
 public:
 	AMainPawnCharacter();
@@ -35,8 +34,6 @@ public:
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	UCameraComponent* CameraComponent;
-
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 	bool bIsGround;

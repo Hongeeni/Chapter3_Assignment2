@@ -34,23 +34,9 @@ AMainPawnCharacter::AMainPawnCharacter()
 
 	NormalSpeed = 600.0f;
 	SprintSpeedMultiplier = 1.75f;
-	CharacterSpeed = NormalSpeed;
+	MovementComponent->MaxSpeed = NormalSpeed;
 
 	PrimaryActorTick.bCanEverTick = true;
-}
-
-void AMainPawnCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (Controller)
-	{
-		FRotator ControlRot = Controller->GetControlRotation();
-		FRotator YawOnlyRot(0.0f, ControlRot.Yaw, 0.0f);
-		SetActorRotation(YawOnlyRot);
-	}
-
-	//AddGravity();
 }
 
 void AMainPawnCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -112,14 +98,16 @@ void AMainPawnCharacter::Look(const FInputActionValue& value) {
 
 	// Yaw: 도리도리
 	AddControllerYawInput(LookInput.X);
+	SetActorRotation(FRotator(0.0f, Controller->GetControlRotation().Yaw, 0.0f));
+
 	// Pitch: 끄덕끄덕
 	AddControllerPitchInput(LookInput.Y);
 }
 void AMainPawnCharacter::StartSprint(const FInputActionValue& value) {
-	CharacterSpeed = NormalSpeed * SprintSpeedMultiplier;
+	MovementComponent->MaxSpeed = NormalSpeed * SprintSpeedMultiplier;
 }
 void AMainPawnCharacter::EndSprint(const FInputActionValue& value) {
-	CharacterSpeed = NormalSpeed;
+	MovementComponent->MaxSpeed = NormalSpeed;
 }
 /*
 void AMainPawnCharacter::AddGravity()
